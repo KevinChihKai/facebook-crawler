@@ -1,0 +1,117 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Facebook API utils by arianpasquali</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1>Facebook API utils</h1>
+        <p>Scripts to crawl data from Facebook Graph API for text minning purposes</p>
+
+        <p class="view"><a href="https://github.com/arianpasquali/facebook-crawler">View the Project on GitHub <small>arianpasquali/facebook-crawler</small></a></p>
+
+
+        <ul>
+          <li><a href="https://github.com/arianpasquali/facebook-crawler/zipball/master">Download <strong>ZIP File</strong></a></li>
+          <li><a href="https://github.com/arianpasquali/facebook-crawler/tarball/master">Download <strong>TAR Ball</strong></a></li>
+          <li><a href="https://github.com/arianpasquali/facebook-crawler">View On <strong>GitHub</strong></a></li>
+        </ul>
+      </header>
+      <section>
+        <h1>Facebook scripts</h1>
+
+<p>This repo contain scripts for text minning porpouses.</p>
+
+<p>Using <a href="https://developers.facebook.com/docs/reference/api/">Facebook Graph API</a> the script "fb_load_comments.py" loads comments from an specific facebook object (e.g. posts, photos, etc). </p>
+
+<h3>Usage</h3>
+
+<p><strong>Basic Usage</strong></p>
+
+<pre><code>./fb_load_comments.py -h
+
+  Options:
+  --version             show program's version number and exit
+  -h, --help            show this help message and exit
+
+  -T OAUTH_ACCESS_TOKEN, --OAuthToken=OAUTH_ACCESS_TOKEN 
+                        Facebook OAuth Access Token (You can get your on here
+                        https://developers.facebook.com/tools/explorer/) (optional)
+
+  -F FACEBOOK_OBJECT_ID, --FacebookObjectId=FACEBOOK_OBJECT_ID
+                        Facebook Object Id. You can find more about it here
+                        https://developers.facebook.com/docs/reference/api/
+
+  -L PAGE_SIZE, --PageSize=PAGE_SIZE
+                        Pagination size (1-999) (optional)
+
+  -O OFFSET, --Offset=OFFSET
+                        Pagination offset (optional)
+
+  -S SOLR_ADDRESS, --Solr=SOLR_ADDRESS
+                        Solr Address (optional)
+</code></pre>
+
+<p><strong>Getting Facebook object id</strong></p>
+
+<p>From a Facebook post with the following link <a href="https://www.facebook.com/photo.php?fbid=10151165605121749&amp;set=a.53081056748.66806.6815841748&amp;type=1&amp;theater">https://www.facebook.com/photo.php?fbid=10151165605121749&amp;set=a.53081056748.66806.6815841748&amp;type=1&amp;theater</a> the Facebook Object Id in this case is 10151165605121749 represented by fbid parameter on the URL.</p>
+
+<pre><code>./fb_load_comments.py -F 10151165605121749
+</code></pre>
+
+<p><strong>Authentication</strong></p>
+
+<p>In order to get more results you must provide an OAuth access token. You can get a temporary one at <a href="https://developers.facebook.com/tools/explorer/">Facebook Developer Explorer</a></p>
+
+<p><strong>Indexing</strong></p>
+
+<p>Its possible to index the comments on <a href="http://lucene.apache.org/solr/">Apache Solr</a>.</p>
+
+<pre><code>./fb_load_comments.py -F 10151165605121749 -S http://localhost:8983/solr
+</code></pre>
+
+<p>Your Solr schema.xml must be something like this :</p>
+
+<pre><code>&lt;fields&gt;   
+    &lt;field name="id"    type="string"   indexed="true" stored="true" required="true"/&gt;
+    &lt;field name="user_id"   type="string"   indexed="true" stored="true"/&gt;
+    &lt;field name="name"  type="string"   indexed="true" stored="true"/&gt;
+    &lt;field name="in_reply_to_object_id" type="string"   indexed="true" stored="true"/&gt;
+    &lt;field name="like_count"    type="int"  indexed="true" stored="true"/&gt;
+    &lt;field name="text"  type="text_general" indexed="true" stored="true" /&gt;
+    &lt;field name="created_at"    type="date" indexed="true" stored="true"/&gt;          
+&lt;fields&gt;
+</code></pre>
+
+<p><strong>Important note</strong></p>
+
+<p>For performance reasons it is not responsible for committing. 
+I highly recommend leaving this job for Apache Solr. Take a look at <a href="http://wiki.apache.org/solr/SolrConfigXml#Update_Handler_Section">autoCommit</a> feature.</p>
+
+<p><strong>TODO</strong></p>
+
+<p>Send documents to Solr in batch.</p>
+
+<h3>Dependencies</h3>
+
+<p>It depends on <a href="https://github.com/jgorset/facepy">facepy</a> and <a href="http://code.google.com/p/solrpy/">solrpy</a>. </p>
+      </section>
+      <footer>
+        <p>This project is maintained by <a href="https://github.com/arianpasquali">arianpasquali</a></p>
+        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
+      </footer>
+    </div>
+    <script src="javascripts/scale.fix.js"></script>
+    
+  </body>
+</html>
